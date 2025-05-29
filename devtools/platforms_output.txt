@@ -1,0 +1,4 @@
+platforms = [
+    pygame.Rect(0, 509, 566, 19),
+    pygame.Rect(620, 442, 182, 20),
+]
