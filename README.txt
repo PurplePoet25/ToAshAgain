@@ -1,69 +1,136 @@
-# To Ash Again
+# 🌆 To Ash Again
 
-**A pixel art platformer with dual characters, powers, and an unfolding rooftop story.**
-
----
-
-## 🎮 What is This Game?
-
-*To Ash Again* is a cozy, mysterious pixel game where you explore rooftops, switch between two characters, read books, glide in the air, and survive dramatic falls. No tech skills needed!
+A pixel art platformer set in a dreamlike, post-collapse city where ashes drift through broken skies and forgotten powers lie buried in dust.
+Built with Python and Pygame — handcrafted with love, frustration, and CTRL+Z.
 
 ---
 
-## 🛠 How to Play (Simple Setup)
+## 🎮 Controls
 
-Even if you're not into coding, you can follow these steps:
-
-### 1. Download the Game Folder
-
-* Make sure you have the game files (including a folder called `assets`)
-* Inside, you should see files like `main.py`, `player.py`, `run_game.bat`, etc.
-
-### 2. Run the Game
-
-* Find the file named `run_game.bat`
-* **Double-click it!**
-* It will:
-
-  * Check if Python is installed
-  * Install anything missing (like the Pygame library)
-  * Start the game automatically
-
-If Python isn’t installed, it will tell you where to get it from.
+| Key     | Action                           |
+| ------- | -------------------------------- |
+| `← / →` | Move left / right                |
+| `Space` | Jump / Double Jump / Glide       |
+| `Shift` | Switch characters (after unlock) |
+| `R`     | Read (trigger special animation) |
+| `1–3`   | Use item from inventory          |
+| `Esc`   | Pause / Exit                     |
 
 ---
 
-## 🕹 Controls
+## 🧠 Features
 
-| Key       | Action                            |
-| --------- | --------------------------------- |
-| `←` / `→` | Walk left / right                 |
-| `Space`   | Jump (or fly/glide with Alt)      |
-| `Shift`   | Switch between the two characters |
-| `R`       | Read books / open your inventory  |
-| `Mouse`   | Click buttons on screen (menus)   |
-| `1–9`     | Use powers (coming soon!)         |
+* 🧝 **Two playable characters** with unique movement styles:
+
+  * **Main**: Double Jump
+  * **Alt**: Jump → Flight → Glide (unlocked later)
+* 🌍 **Four Acts** (Green, Blue, Umber, Red), each with:
+
+  * Themed backgrounds
+  * Unique platform layouts
+  * Custom enemy types
+* 🦟 **Enemies**:
+
+  * Melee: Patrol and contact damage
+  * Ranged: Stationary, shoots projectiles
+  * Boss (Infernal Vicar): Aggressive, multi-phase fight
+* 🎒 **Inventory system**:
+
+  * Stack-based, 3-slot limit
+  * Items are lost when used
+* ✨ **Totem powers** (random drops):
+
+  * `Drift` – Dash attack, invincible mid-move
+  * `Ember` – Fireball
+  * `Pulse` – AoE burst
+  * `Gravity` – Pull enemies toward player
+  * `Mending` – Heal 1 HP
+  * `1up` – Gain a life
+* 🎮 **Cutscenes**:
+
+  * Post-act unlocks
+  * Final winning sequence
+* 🏑 **Endgame dimension**:
+
+  * Unlock via purple star
+  * Characters walk through memoryscape of all acts
 
 ---
 
-## 💡 What’s Inside the Game
+## 🗂️ Project Structure
 
-* A title screen with a Play button
-* Lives and health bar
-* Falling too far can damage you!
-* A reading mode
-* Special abilities like flying and gliding
-* Platform jumping with real-feel gravity
+```
+PixelGame/
+├── assets/                 # All art, sprite sheets, background images
+│   ├── backgrounds/
+│   ├── powers/
+│   └── sprites/
+├── main.py                 # Main game loop
+├── game_state.py           # Global state
+├── powers.py               # Power logic + effects
+├── level.py                # Platform layout per act
+├── player.py               # Character behavior
+├── actX_manager.py         # Logic per act
+├── home_manager.py         # Hub world and unlocking
+├── cutscene_manager.py     # Final cutscene logic
+└── README.md               # This file
+```
 
 ---
 
-## 🧱 Coming Soon!
+## 🛠 Installation
 
-* Enemies and danger
-* Magical totems you can collect
-* More places to explore
-* A story hidden in the background
+### Prerequisites
+
+* Python 3.10+
+* Pygame
+
+### Install Pygame
+
+```bash
+pip install pygame
+```
+
+### Run the Game
+
+```bash
+python main.py
+```
+
+Make sure all assets are correctly placed and paths aren't broken!
 
 ---
 
-Made with 💖 for dreamers, rooftop lovers, and pixel fans. Enjoy the game!
+## 📸 Visual Preview
+
+***\[Insert GIFs or screenshots here once available]***
+
+> Tip: Use GitHub’s drag-and-drop to add `.gif` or `.png` files into this section.
+
+---
+
+## 🧪 Known Issues / TODOs
+
+* [ ] Implement spike traps
+* [ ] Polish collision logic for edge cases
+* [ ] Add sound/music support
+* [ ] Improve boss projectile hitbox
+* [ ] Visual README with game screenshots
+
+---
+
+## ✨ Credits
+
+**Created by Hasan Bukhari**
+President of the Student Poets Association @ Southern Miss
+Poet, programmer, and pixel punisher.
+
+*“To Ash Again” was built as a love letter to resilience, duality, and Karachi rooftops.*
+
+---
+
+## 📄 License
+
+This game is a personal project. Licensing info coming soon.
+Feel free to fork, play, and reach out if you’d like to collaborate.
+
