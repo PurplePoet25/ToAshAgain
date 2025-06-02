@@ -3,12 +3,15 @@ from settings import *
 from game_state import game_state
 from assets import load_totem_sprite
 import random
+import os
 
 anim_sheet = None
 
 def load_anim_sheet():
     global anim_sheet
-    anim_sheet = pygame.image.load("assets/powers/anim.png").convert_alpha()
+    base_path = os.path.dirname(os.path.abspath(__file__))  # current file location
+    asset_path = os.path.join(base_path, "..", "assets", "powers", "anim.png")
+    anim_sheet = pygame.image.load(asset_path).convert_alpha()
 
 def get_anim_frame(index):
     frame_w, frame_h = anim_sheet.get_width() // 3, anim_sheet.get_height() // 2
@@ -50,7 +53,7 @@ def load_totem_sprites():
     global totem_sprites
     def scaled(name):
         return pygame.transform.scale(load_totem_sprite(name), (51, 47))
-    
+
     totem_sprites = {
         "mending": scaled("mendingtotem.png"),
         "gravity": scaled("gravitytotem.png"),
@@ -96,9 +99,6 @@ def add_power(power_name, platforms=None):
         "spawn_time": pygame.time.get_ticks()  # ⏰ track when it was dropped
     })
 
-def shift_inventory_left():
-    inv = game_state["power_inventory"]
-    game_state["power_inventory"] = [p for p in inv if p is not None] + [None] * (3 - len([p for p in inv if p is not None]))
 def use_power(index, player, enemies):
     power = game_state["power_inventory"][index]
     if not power:
@@ -118,16 +118,12 @@ def use_power(index, player, enemies):
         game_state["stomp_mode"] = "gravity"
         game_state["stomp_start_time"] = pygame.time.get_ticks()
         game_state["ignore_next_damage"] = True
-
-        for enemy in enemies:
-            if hasattr(enemy, "take_damage"):
-                spawn_effect("gravity", enemy.x + enemy.width // 2 - 20, enemy.y - 20, duration=600)
-                enemy.take_damage()
+        spawn_effect("gravity", get_offset_x(player.x + 12), player.y - 50, duration=600)
 
     elif power == "ember":
         ember_projectiles.append({
-            "x": player.x + 20,
-            "y": player.y + 40,
+            "x": player.x + (60 if player.facing_right else -10),
+            "y": player.y + 20 if not player.is_jumping else player.y,
             "vx": 5 if player.facing_right else -5,
             "vy": -6,
             "bounces": 0,
@@ -135,18 +131,12 @@ def use_power(index, player, enemies):
         })
         game_state["power_inventory"][index] = None  # Remove the totem immediately
 
-
     elif power == "drift":
         game_state["drifting"] = True
         game_state["drift_timer"] = pygame.time.get_ticks()
         game_state["drift_ignore_damage"] = True
         player.dash_target_x = player.x + (200 if player.facing_right else -200)
         spawn_effect("drift", get_offset_x(player.x), player.y + 30, duration=500)
-
-        for enemy in enemies:
-            if hasattr(enemy, "take_damage"):
-                spawn_effect("drift", enemy.x + enemy.width // 2 - 20, enemy.y, duration=600)
-                enemy.take_damage()
 
     elif power == "pulse":
         for enemy in enemies:
@@ -158,7 +148,6 @@ def use_power(index, player, enemies):
                 enemy.alive = False
 
     game_state["power_inventory"][index] = None
-
 
 def spawn_effect(name, x, y, duration=600):
     if name == "gravity":
@@ -202,7 +191,11 @@ def update_falling_totems(screen, player):
         return
 
     # Use a copy for safe iteration
-    for totem in visible_totems[:]:
+    for totem in falling_totems[:]:
+
+        if totem["screen"] != current_screen:
+            continue  # ❌ Skip totems not on this screen
+
         # ❌ Despawn if older than 10 seconds
         if pygame.time.get_ticks() - totem.get("spawn_time", 0) > 10000:
             falling_totems.remove(totem)
@@ -225,7 +218,6 @@ def update_falling_totems(screen, player):
         if pickup_box.colliderect(rect):
             add_to_inventory(totem["name"])
             falling_totems.remove(totem)
-
 
 def get_closest_enemy(player, enemies):
     min_dist = float('inf')

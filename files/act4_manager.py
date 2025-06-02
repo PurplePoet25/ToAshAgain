@@ -4,7 +4,7 @@ import os
 from settings import *
 from game_state import game_state
 from assets import load_win_feather, load_enemy_sprite_sheet
-from level import act4_platforms
+from level import act4_platforms, act4_spikes
 from enemy_data import enemy_config
 from enemy import MeleeEnemy, RangedEnemy, BossInfernalVicar
 
@@ -96,6 +96,10 @@ def handle_act4_logic(screen, player, keys, act4_backgrounds):
     player.update_physics(keys[pygame.K_SPACE], platforms)
     player.animate(game_state['reading'], moving)
     player.draw(screen)
+
+    for spike in act4_spikes.get(game_state['act_index'], []):
+        if player.get_rect().colliderect(spike):
+            player.take_damage()
 
     # === Feather Logic (only appears after boss dies) ===
     if index == 9 and game_state.get("boss_phase") == "dead" and not game_state['feather_collected']:

@@ -3,15 +3,15 @@ import sys
 import os
 
 # === Background Image Path ===
-BG_PATH = r"C:\Users\hasan\Desktop\PixelGame\assets\backgrounds\win\cutscene1.png"
+BG_PATH = r"C:\Users\hasan\Desktop\ToAshAgain\assets\ui\title.png"
 BG_PATH = BG_PATH.encode('unicode_escape').decode('utf-8')
 
 # === Win Feather Path ===
-FEATHER_PATH = r"C:\Users\hasan\Desktop\PixelGame\assets\ui\winfeather.png"
+FEATHER_PATH = r"C:\Users\hasan\Desktop\ToAshAgain\assets\ui\winfeather.png"
 FEATHER_PATH = FEATHER_PATH.encode('unicode_escape').decode('utf-8')
 
 # === Inventory Panel Path ===
-INV_PATH = r"C:\Users\hasan\Desktop\PixelGame\assets\ui\inventory_panel.png"
+INV_PATH = r"C:\Users\hasan\Desktop\ToAshAgain\assets\ui\inventory_panel.png"
 INV_PATH = INV_PATH.encode('unicode_escape').decode('utf-8')
 
 # === Pygame Init ===
@@ -25,7 +25,6 @@ clock = pygame.time.Clock()
 # === Load Images ===
 background = pygame.transform.scale(pygame.image.load(BG_PATH), (SCREEN_WIDTH, SCREEN_HEIGHT))
 feather_raw = pygame.image.load(FEATHER_PATH).convert_alpha()
-inv_img = pygame.image.load(INV_PATH).convert_alpha()
 
 # === Feather Position + Size ===
 feather_x, feather_y = 468, 144
@@ -41,9 +40,6 @@ running = True
 while running:
     screen.blit(background, (0, 0))
 
-    # === Draw Inventory Panel (scaled and positioned like in-game) ===
-    scaled_inv = pygame.transform.scale(inv_img, (160, 220))
-    screen.blit(scaled_inv, (670, 90))
 
     # === Draw Feather ===
     feather_img = pygame.transform.scale(feather_raw, (feather_width, feather_height))

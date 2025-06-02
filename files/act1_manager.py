@@ -4,7 +4,7 @@ import os
 from settings import *
 from game_state import game_state
 from assets import load_win_feather, load_enemy_sprite_sheet
-from level import act1_platforms
+from level import act1_platforms, act1_spikes
 from enemy_data import enemy_config
 from enemy import MeleeEnemy, RangedEnemy
 
@@ -52,6 +52,12 @@ def handle_act1_logic(screen, player, keys, act1_backgrounds):
     player.update_physics(keys[pygame.K_SPACE], platforms)
     player.animate(game_state['reading'], moving)
     player.draw(screen)
+
+    # --- Spikes
+    for spike in act1_spikes.get(game_state['act_index'], []):
+        if player.get_rect().colliderect(spike):
+            player.take_damage()
+
 
     # --- Enemy Logic
     for enemy in screen_enemies:

@@ -127,5 +127,7 @@ def handle_cutscene_logic(screen, cutscene_backgrounds, player_main, player_alt)
     player_alt.is_jumping = False
     player_alt.vy = 0
     player_alt.animate(False, True)
-    alt_img = pygame.transform.scale(player_alt.current_frame, (int(player_alt.current_frame.get_width() * 1.5), player_alt.current_frame.get_height()))
-    screen.blit(alt_img, (player_alt.x, player_alt.y))
+    wider = pygame.transform.scale(player_alt.current_frame, (player_alt.current_frame.get_width() + 60, player_alt.current_frame.get_height()))
+    screen.blit(wider, (player_alt.x, player_alt.y))
+
+

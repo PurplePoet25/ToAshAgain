@@ -48,15 +48,15 @@ class MeleeEnemy:
             return
 
         enemy_rect = self.get_rect()
-        player_rect = player.get_rect()
+        player_feet = player.get_feet_rect()
+        head_zone = pygame.Rect(self.x + 20, self.y, self.width - 40, 10)  # Only top 10px of head
 
-        if player_rect.colliderect(enemy_rect):
-            if player.vy > 0 and player_rect.bottom <= enemy_rect.top + 10:
-                self.alive = False
-                player.vy = -10
-                return
-            else:
-                player.take_damage()
+        if player_feet.colliderect(head_zone) and player.vy > 0:
+            self.alive = False
+            player.bounce()
+        elif player.get_rect().colliderect(enemy_rect):
+            player.take_damage()
+
 
 
 class RangedEnemy:
@@ -157,21 +157,21 @@ class RangedEnemy:
             return
 
         enemy_rect = self.get_rect()
-        player_rect = player.get_rect()
+        player_feet = player.get_feet_rect()
+        head_zone = pygame.Rect(self.x + 20, self.y, self.width - 40, 10)  # Only top 10px of head
 
-        if player_rect.colliderect(enemy_rect):
-            if player.vy > 0 and player_rect.bottom <= enemy_rect.top + 10:
-                self.alive = False
-                player.vy = -10
-                return
-            else:
-                player.take_damage()
+        if player_feet.colliderect(head_zone) and player.vy > 0:
+            self.alive = False
+            player.bounce()
+        elif player.get_rect().colliderect(enemy_rect):
+            player.take_damage()
 
         for proj in self.projectiles[:]:
             proj_rect = pygame.Rect(proj['x'], proj['y'], 18, 18)
             if proj_rect.colliderect(player.get_rect()):
                 player.take_damage()
                 self.projectiles.remove(proj)
+
 
 class BossInfernalVicar:
     def __init__(self, x, y, sprites, platforms):

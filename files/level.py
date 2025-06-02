@@ -482,3 +482,44 @@ cutscene_platforms = [
     ]
 ]
 
+act1_spikes = {
+    5: [pygame.Rect(226, 493, 294, 42)],
+    6: [pygame.Rect(242, 506, 250, 44)],
+    7: [pygame.Rect(453, 322, 153, 40)],
+    8: [pygame.Rect(558, 506, 124, 32)],
+    9: [pygame.Rect(164, 499, 161, 43)]
+}
+
+act3_spikes = {
+    4: [pygame.Rect(626, 398, 137, 24)],
+    5: [pygame.Rect(342, 503, 128, 48)],
+    6: [
+        pygame.Rect(107, 263, 90, 51),
+        pygame.Rect(646, 437, 100, 39), 
+    ],
+    7: [
+        pygame.Rect(246, 438, 78, 35),
+        pygame.Rect(702, 286, 73, 35),
+    ],
+    8: [pygame.Rect(599, 178, 177, 31)],
+    9: []
+
+}
+
+act4_spikes = {
+    1: [    
+        pygame.Rect(89, 442, 257, 86),
+        pygame.Rect(546, 483, 35, 51),
+        pygame.Rect(572, 441, 43, 78),
+        pygame.Rect(610, 407, 61, 52),
+    ],
+    2: [
+        pygame.Rect(167, 459, 143, 64),
+        pygame.Rect(555, 426, 47, 90),
+        pygame.Rect(588, 394, 48, 75),
+    ],
+    3: [pygame.Rect(519, 423, 148, 47)],
+    4: [pygame.Rect(535, 452, 119, 86)],
+    6: [pygame.Rect(172, 522, 124, 46)],
+    7: [pygame.Rect(446, 426, 121, 73)]
+}

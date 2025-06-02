@@ -13,9 +13,9 @@ game_state = {
     'showing_death': False,
 
     # --- UNLOCK SYSTEM ---
-    'alt_unlocked': True, #CHANGE
+    'alt_unlocked': False, #CHANGE
     'just_unlocked_alt': False,
-    'act_unlocked': [False, False, True, False], #CHANGE
+    'act_unlocked': [True, False, False, False], #CHANGE
     'feather_collected': False,
 
     # --- TRANSITION STATE ---

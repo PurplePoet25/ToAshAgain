@@ -73,7 +73,10 @@ def handle_home_logic(screen, player, keys, events, teacup_zones, backgrounds, e
         not game_state.get('purple_star_collected')
     ):
         if 'purple_star_img' not in game_state:
-            raw_star = pygame.image.load(os.path.join(ASSET_DIR, "ui", "purplestar.png")).convert_alpha()
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            star_path = os.path.join(script_dir, "..", "assets", "ui", "purplestar.png")
+            raw_star = pygame.image.load(star_path).convert_alpha()
+
             game_state['purple_star_img'] = pygame.transform.scale(raw_star, (68, 63))
             game_state['purple_star_y'] = -80
             game_state['purple_star_target_y'] = (SCREEN_HEIGHT - 63) // 2

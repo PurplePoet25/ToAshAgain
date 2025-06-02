@@ -1,3 +1,6 @@
+import ctypes
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("ToAshAgain.unique.id")
+
 import pygame
 import sys
 import os
@@ -13,11 +16,10 @@ from settings import (
     ACT1_START_INDEX, DROP_RATES_BY_ACT  # ✅ now included
 )
 from assets import (
-    load_sprite_sheet, load_home_backgrounds, load_act1_backgrounds, load_act2_backgrounds, load_act3_backgrounds,
+    load_sprite_sheet, load_main_sprite_sheet, load_alt_sprite_sheet, load_home_backgrounds, load_act1_backgrounds, load_act2_backgrounds, load_act3_backgrounds,
     load_inventory_panel, load_title_image, load_healthbar_frames, load_lives_image,
     load_death_messages, load_enter_popup, load_shift_popup, load_left_arrow, load_bossbar, load_win_backgrounds, load_act4_backgrounds, load_cutscene_backgrounds
 )
-from game_state import game_state
 from player import Player
 from level import core_platforms, act1_platforms, act2_platforms, act3_platforms, act4_platforms
 from home_manager import handle_home_screen, handle_home_logic
@@ -28,15 +30,44 @@ from act4_manager import handle_act4_logic
 from win_manager import handle_win_logic
 from cutscene_manager import handle_cutscene_logic
 from powers import draw_inventory, update_power_effects, update_falling_totems, use_power, add_power, load_anim_sheet, load_totem_sprites, update_ember_projectiles, falling_totems
+from game_state import game_state
+
+
+# === Ensure critical keys always exist ===
+required_keys = {
+    'alt_unlocked': False,
+    'just_unlocked_alt': False,
+    'act_unlocked': [True, False, False, False],
+    'feather_collected': False,
+    'power_inventory': [None, None, None],
+    'show_shift_popup': False,
+    'using_alternate': False,
+    'last_shift_time': -float('inf')
+}
+for key, default in required_keys.items():
+    if key not in game_state:
+        game_state[key] = default
 
 # ✅ INIT
 pygame.init()
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+script_dir = os.path.dirname(os.path.abspath(__file__))  # ✅ current script folder
+icon_path = os.path.join(script_dir, "..", "assets", "icon.png")
+icon_path = os.path.abspath(icon_path)  # optional: ensures full path
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))  # ✅ SET DISPLAY FIRST
+pygame.display.set_caption("To Ash Again")
+
+icon_surface = pygame.image.load(icon_path).convert_alpha()  # ✅ NOW safe to call
+pygame.display.set_icon(icon_surface)
+
+print("✅ Video mode set successfully")
+
+
 
 # ✅ Load power sprites AFTER display is initialized
 load_anim_sheet()
 load_totem_sprites()
-
 
 pygame.display.set_caption("To Ash Again")
 clock = pygame.time.Clock()
@@ -47,25 +78,34 @@ act1_backgrounds = load_act1_backgrounds()
 act2_backgrounds = load_act2_backgrounds()
 act3_backgrounds = load_act3_backgrounds()
 act4_backgrounds = load_act4_backgrounds()
-raw_frames1 = load_sprite_sheet(f"{ASSET_DIR}/sprites/spritesheet.png", 4, 2)
-raw_frames2 = load_sprite_sheet(f"{ASSET_DIR}/sprites/spritesheet2.png", 4, 2)
+
+
+raw_frames1 = load_main_sprite_sheet()
+raw_frames2 = load_alt_sprite_sheet()
 inv_img = load_inventory_panel()
 title_img = load_title_image()
 healthbar_frames = [pygame.transform.scale(f, (400, 75)) for f in load_healthbar_frames()]
 lives_img = load_lives_image()
 death_msg1, death_msg2 = load_death_messages()
 
-angel_img = pygame.image.load(os.path.join(ASSET_DIR, "powers", "angel.png")).convert_alpha()
+angel_path = os.path.abspath(os.path.join(script_dir, "..", "assets", "powers", "angel.png"))
+angel_img = pygame.image.load(angel_path).convert_alpha()
 angel_img = pygame.transform.scale(angel_img, (51, 47))
+
 shift_popup_img = pygame.transform.scale(load_shift_popup(), (300, 170))
 enter_popup = pygame.transform.scale(load_enter_popup(), (200, 140))
 left_arrow = pygame.transform.scale(load_left_arrow(), (120, 80))
 angel_rect = pygame.Rect(242, 322, 51, 47)
+
 inv_img_raw = load_inventory_panel()
 inv_img = pygame.transform.scale(inv_img_raw, (160, 220))
-pause_img = pygame.transform.scale(pygame.image.load(os.path.join(ASSET_DIR, "ui", "pause.png")).convert_alpha(), (480, 519))
+
+pause_path = os.path.abspath(os.path.join(script_dir, "..", "assets", "ui", "pause.png"))
+pause_img = pygame.transform.scale(pygame.image.load(pause_path).convert_alpha(), (480, 519))
+
 win_backgrounds = load_win_backgrounds()
 cutscene_backgrounds = load_cutscene_backgrounds()
+
 
 bossbar_img = load_bossbar()
 bossbar_frames = [
@@ -74,15 +114,18 @@ bossbar_frames = [
 ]
 
 # === Load both player sprite sheets ===
-main_frames = load_sprite_sheet("assets/sprites/spritesheet.png", 4, 2)
-alt_frames = load_sprite_sheet("assets/sprites/spritesheet2.png", 4, 2)
+main_path = os.path.abspath(os.path.join(script_dir, "..", "assets", "sprites", "spritesheet.png"))
+alt_path = os.path.abspath(os.path.join(script_dir, "..", "assets", "sprites", "spritesheet2.png"))
+main_frames = load_sprite_sheet(main_path, 4, 2)
+alt_frames = load_sprite_sheet(alt_path, 4, 2)
+
 
 # === Main and Alt characters ===
 player = Player(main_frames, MAX_JUMPS_MAIN)
 alt_character = Player(alt_frames, MAX_JUMPS_ALT)  # Used in cutscene only
 
 
-play_button = pygame.Rect(SCREEN_WIDTH // 2 - 220, 360, 250, 80)
+play_button = pygame.Rect(286, 415, 214, 84)
 teacup_zones = [
     pygame.Rect(155, 457, 62, 19),
     pygame.Rect(307, 458, 52, 17),
@@ -139,7 +182,8 @@ while running:
                 player.reset_position(y=300)
             game_state['transitioning_to_act'] = False
         else:
-            img = pygame.image.load(f"{ASSET_DIR}/ui/entering_act.png")
+            entering_path = os.path.join(script_dir, "..", "assets", "ui", "entering_act.png")
+            img = pygame.image.load(os.path.abspath(entering_path)).convert()
             img = pygame.transform.scale(img, (SCREEN_WIDTH, SCREEN_HEIGHT))
             screen.blit(img, (0, 0))
             pygame.display.flip()
@@ -228,7 +272,7 @@ while running:
                 now = pygame.time.get_ticks()
                 if event.key == pygame.K_SPACE and not game_state['reading']:
                     player.jump(keys[pygame.K_SPACE])
-                elif event.key == pygame.K_LSHIFT and game_state['alt_unlocked']:
+                elif event.key == pygame.K_LSHIFT and game_state.get('alt_unlocked', False):
                     if now - game_state['last_shift_time'] >= SHIFT_COOLDOWN_FRAMES * 1000 // FPS:
                         game_state['using_alternate'] = not game_state['using_alternate']
                         game_state['last_shift_time'] = now
@@ -396,13 +440,31 @@ while running:
         platforms = act4_platforms[game_state['act_index']]
 
     elif game_state['current_act'] == 5:
+        game_state['alt_unlocked'] = True
+        game_state['player_can_move'] = True  # ✅ allow movement + SHIFT
         handle_win_logic(screen, player, keys, win_backgrounds)
+
+        # Restrict player from walking off left/right beyond win screens
+        if player.x > SCREEN_WIDTH:
+            if game_state['screen_index'] < 2:
+                game_state['screen_index'] += 1
+                player.x = 0
+            else:
+                player.x = SCREEN_WIDTH - 80  # prevent falling off
+        elif player.x < 0:
+            if game_state['screen_index'] > 0:
+                game_state['screen_index'] -= 1
+                player.x = SCREEN_WIDTH - 80
+            else:
+                player.x = 0  # prevent falling off
+
 
         # === Winning world transition handler
     if game_state.get('transitioning_to_win'):
         if game_state.get("transitioning_to_win"):
             game_state["current_act"] = 5  # ✅ Go to winning world
             game_state["screen_index"] = 1
+            game_state["using_alternate"] = False
             game_state["transitioning_to_win"] = False
             game_state["cutscene_screen_index"] = 0
             # Reset player position if needed
@@ -422,11 +484,18 @@ while running:
 
     # === VOID CHECK: run BEFORE checking platform collisions ===
     if player.y > SCREEN_HEIGHT and not game_state['showing_death']:
-        print("☠️ VOID KILL triggered on screen", game_state['act_index'])
         apply_player_damage()
         if game_state['player_health'] <= 0:
             game_state['player_lives'] -= 1
             game_state['showing_death'] = True
+
+            # 🟣 Fix: if in win world, respawn to screen 1
+            if game_state['current_act'] == 5:
+                game_state['screen_index'] = 1
+                from level import win_platforms
+                player.reset_position()
+                player.y = win_platforms[1][0].top - 128
+
 
     for p in platforms:
         if player.get_rect().colliderect(p) and player.vy >= 0:
@@ -452,10 +521,6 @@ while running:
                 player.fly_timer = 0
     if hasattr(player, 'fall_start_y'):
         del player.fall_start_y
-
-    
-
-
 
     # ✅ Gravity Totem: Deal -1 HP to closest enemy or boss
     if game_state.get("stomp_mode") == "gravity":
@@ -502,9 +567,18 @@ while running:
     else:
         current_screen = game_state["screen_index"]
 
-    if game_state["last_screen"] != current_screen:
+    if "last_screen" not in game_state:
         game_state["last_screen"] = current_screen
+
+    if "last_act" not in game_state:
+        game_state["last_act"] = game_state["current_act"]
+
+    if game_state["current_act"] != game_state["last_act"]:
         game_state["last_drop_time"] = now
+        game_state["last_act"] = game_state["current_act"]
+
+    game_state["last_screen"] = current_screen
+
 
     drop_delay = 6000  # Reduced from 10000
 
@@ -515,16 +589,12 @@ while running:
     if (
         None in game_state["power_inventory"] and
         len(totems_on_screen) < max_totems and
-        not game_state.get('transitioning_to_act') and
         now - game_state["last_drop_time"] > drop_delay
     ):
         game_state["last_drop_time"] = now
         chosen = choose_weighted_drop(game_state["current_act"])
         if chosen:
             add_power(chosen, platforms)
-
-
-
 
     screen.blit(healthbar_frames[5 - max(0, min(5, game_state['player_health']))], (0, 5))
     frame_height = lives_img.get_height() // 5
