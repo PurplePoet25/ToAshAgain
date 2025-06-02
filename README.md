@@ -127,9 +127,9 @@ ToAshAgain/
 
 ## 🖼️ Visual Preview
 
-![screenshot_001](https://github.com/user-attachments/assets/a037545f-af0a-4c5e-a43a-8a24f499c00f)
+![screenshot_001](https://github.com/user-attachments/assets/1d36d73e-4c50-4dc4-a389-707f86b870ad)
 
-![screenshot_073](https://github.com/user-attachments/assets/15db0dea-238d-476a-9a74-7b27f65e460c)
+![screenshot_073](https://github.com/user-attachments/assets/2b490a07-ce7a-44a2-849b-51ac029501f9)
 
 ---
 
