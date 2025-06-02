@@ -127,8 +127,9 @@ ToAshAgain/
 
 ## 🖼️ Visual Preview
 
-**(Insert GIFs or screenshots here)**  
-Tip: Drag and drop `.gif` or `.png` files into this section on GitHub to show off your game!
+![screenshot_001](https://github.com/user-attachments/assets/a037545f-af0a-4c5e-a43a-8a24f499c00f)
+
+![screenshot_073](https://github.com/user-attachments/assets/15db0dea-238d-476a-9a74-7b27f65e460c)
 
 ---
 
