@@ -134,7 +134,6 @@ Tip: Drag and drop `.gif` or `.png` files into this section on GitHub to show of
 
 ## 🔧 Known Issues / TODOs
 
-* [ ] Implement spike traps
 * [ ] Polish collision logic for edge cases
 * [ ] Add sound/music support
 * [ ] Improve boss projectile hitbox
