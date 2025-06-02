@@ -145,7 +145,7 @@ Tip: Drag and drop `.gif` or `.png` files into this section on GitHub to show of
 
 **Created by Hasan Bukhari**  
 President, Student Poets Association @ Southern Miss  
-Poet, programmer, and pixel punisher.
+Poet, programmer, and Karachi rooftop daydreamer.
 
 > "To Ash Again" is a love letter to resilience, duality, and Karachi rooftops.
 
