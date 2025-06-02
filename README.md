@@ -153,5 +153,6 @@ Poet, programmer, and Karachi rooftop daydreamer.
 
 ## 📝 License
 
-MIT License – free to play, study, and modify.  
-Please credit the original creator if you share or build upon this work.
+Custom License – All rights reserved.
+This project is free to play and study, but may not be republished, sold, or modified without explicit permission.
+For inquiries, contact the creator.
