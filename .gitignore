@@ -1,0 +1,22 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyInstaller build folders
+_internal/
+build/
+dist/
+*.spec
+
+# Executables
+*.exe
+
+# Logs and misc
+*.log
+.DS_Store
+.env
+*.zip
+
+# VSCode
+.vscode/
