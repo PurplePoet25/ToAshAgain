@@ -93,32 +93,7 @@ Make sure all assets are in the correct folders to avoid path issues.
 
 ## 📁 Project Structure
 
-ToAshAgain/
-├── assets/
-│   ├── backgrounds/
-│   ├── enemies/
-│   ├── powers/
-│   ├── sprites/
-│   └── ui/
-├── files/
-│   ├── main.py
-│   ├── settings.py
-│   ├── player.py
-│   ├── level.py
-│   ├── powers.py
-│   ├── enemy.py
-│   ├── enemy_data.py
-│   ├── game_state.py
-│   ├── assets.py
-│   ├── cutscene_manager.py
-│   ├── home_manager.py
-│   ├── win_manager.py
-│   ├── screens.py
-│   └── act1–4_manager.py
-├── To Ash Again.exe
-├── _internal/
-├── README.md
-└── LICENSE
+<pre> ```plaintext ToAshAgain/ ├── assets/ │ ├── backgrounds/ │ ├── enemies/ │ ├── powers/ │ ├── sprites/ │ └── ui/ ├── files/ │ ├── main.py │ ├── settings.py │ ├── player.py │ ├── level.py │ ├── powers.py │ ├── enemy.py │ ├── enemy_data.py │ ├── game_state.py │ ├── assets.py │ ├── cutscene_manager.py │ ├── home_manager.py │ ├── win_manager.py │ ├── screens.py │ └── act1–4_manager.py ├── To Ash Again.exe ├── _internal/ ├── README.md └── LICENSE ``` </pre>
 
 ---
 
