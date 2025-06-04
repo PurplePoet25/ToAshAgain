@@ -1,5 +1,12 @@
 import ctypes
-ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("ToAshAgain.unique.id")
+
+# Set the application ID on Windows so the taskbar icon shows correctly.
+# This call is Windows specific and will raise an AttributeError on other
+# platforms, so guard it with a check.
+if hasattr(ctypes, "windll") and hasattr(ctypes.windll, "shell32"):
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(
+        "ToAshAgain.unique.id"
+    )
 
 import pygame
 import sys
